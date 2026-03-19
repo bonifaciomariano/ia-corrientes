@@ -746,9 +746,9 @@ body {
 .detail-panel.open { transform: translateX(0); }
 .detail-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  padding: 20px 22px 14px;
+  padding: 12px 18px;
   background: var(--green-dark);
   flex-shrink: 0;
 }
