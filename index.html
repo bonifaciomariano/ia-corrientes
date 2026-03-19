@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estrategias de IA · Cámara de Diputados de Corrientes</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <span class="brand-tag">ESTRATEGIAS DE IA</span>
+        <span class="brand-sep">·</span>
+        <span class="brand-client">H. Cámara de Diputados de Corrientes</span>
+      </div>
+      <nav class="main-nav">
+        <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="nav-btn" data-tab="cronograma">Cronograma</button>
+        <button class="nav-btn" data-tab="fase1">Fase 1</button>
+        <button class="nav-btn" data-tab="hitos">Hitos</button>
+        <button class="nav-btn nav-btn--config" data-tab="config">⚙</button>
+      </nav>
+      <div class="header-right">
+        <span class="sync-status" id="syncStatus">●&nbsp;Sin sincronizar</span>
+        <button class="editor-toggle" id="editorToggle">Modo lectura</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- DASHBOARD -->
+    <section class="tab-panel active" id="tab-dashboard">
+      <!-- rendered by JS -->
+    </section>
+
+    <!-- CRONOGRAMA -->
+    <section class="tab-panel" id="tab-cronograma">
+      <div class="section-header">
+        <h2>Cronograma 2026</h2>
+        <p class="section-sub">Plan operativo anual · todas las fases</p>
+      </div>
+      <div style="overflow-x:auto;border-radius:10px;border:1px solid #E0E0E0;">
+        <div id="ganttContainer"></div>
+      </div>
+    </section>
+
+    <!-- FASE 1 -->
+    <section class="tab-panel" id="tab-fase1">
+      <div class="section-header">
+        <h2>Fase 1 · Gobernanza y Diagnóstico</h2>
+        <p class="section-sub">Marzo – Junio 2026 · Detalle semanal de productos</p>
+      </div>
+      <div class="f1-products" id="fase1Products"></div>
+    </section>
+
+    <!-- HITOS -->
+    <section class="tab-panel" id="tab-hitos">
+      <div class="section-header">
+        <h2>Hitos y fechas clave</h2>
+        <p class="section-sub">Marzo – Diciembre 2026</p>
+      </div>
+      <div id="hitoCalendar" class="hito-calendar"></div>
+    </section>
+
+    <!-- CONFIG -->
+    <section class="tab-panel" id="tab-config">
+      <div class="section-header">
+        <h2>Configuración</h2>
+        <p class="section-sub">Sincronización y acceso al modo editor</p>
+      </div>
+      <div class="config-grid">
+        <div class="config-card">
+          <div class="config-card-title">Modo editor</div>
+          <div class="config-card-desc">Ingresá la contraseña para activar la edición de estados, notas y descripciones.</div>
+          <div class="config-row">
+            <input type="password" id="editorPassword" placeholder="Contraseña" class="config-input"/>
+            <button class="config-btn" id="unlockBtn">Desbloquear</button>
+          </div>
+          <div class="config-status" id="editorStatus"></div>
+        </div>
+        <div class="config-card">
+          <div class="config-card-title">Sincronización con GitHub Gist</div>
+          <div class="config-card-desc">El estado del proyecto se guarda en un Gist privado. Todos los usuarios ven los mismos datos al cargar la página.</div>
+          <div class="config-row">
+            <input type="text" id="gistId" placeholder="ID del Gist" class="config-input config-input--wide"/>
+          </div>
+          <div class="config-row">
+            <input type="password" id="gistToken" placeholder="Token de GitHub (solo modo editor)" class="config-input config-input--wide"/>
+          </div>
+          <div class="config-row">
+            <button class="config-btn" id="saveGistConfig">Guardar configuración</button>
+            <button class="config-btn config-btn--secondary" id="testGist">Probar conexión</button>
+          </div>
+          <div class="config-status" id="gistStatus"></div>
+        </div>
+        <div class="config-card">
+          <div class="config-card-title">Exportar / Importar estado</div>
+          <div class="config-card-desc">Descargá el estado actual como JSON o importá uno previamente exportado.</div>
+          <div class="config-row">
+            <button class="config-btn" id="exportBtn">Exportar JSON</button>
+            <label class="config-btn config-btn--secondary" for="importFile">Importar JSON</label>
+            <input type="file" id="importFile" accept=".json" style="display:none"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-overlay" id="detailOverlay"></div>
+  <aside class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+      <div class="detail-phase-tag" id="detailPhaseTag"></div>
+      <button class="detail-close" id="detailClose">✕</button>
+    </div>
+    <h3 class="detail-title" id="detailTitle"></h3>
+    <div class="detail-meta" id="detailMeta"></div>
+
+    <!-- Descripción editable -->
+    <div class="detail-section" id="detailDescSection">
+      <div class="detail-label">Descripción</div>
+      <textarea class="detail-notes" id="detailDescText" placeholder="Descripción del producto o tarea…" rows="3" disabled></textarea>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-label">Estado</div>
+      <div class="status-buttons">
+        <button class="status-btn" data-status="pendiente">Pendiente</button>
+        <button class="status-btn" data-status="en-curso">En curso</button>
+        <button class="status-btn" data-status="completado">Completado</button>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-label">Notas</div>
+      <textarea class="detail-notes" id="detailNotes" placeholder="Añadí notas, observaciones o comentarios…" rows="5" disabled></textarea>
+    </div>
+
+    <div class="detail-actions">
+      <button class="detail-save" id="detailSave" disabled>Guardar cambios</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
